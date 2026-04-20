@@ -1,1 +1,7 @@
 # LabAssignment_13
+
+For the delegated event section, I added that to the ResourceManager. In the script, I included a custom delegate and event that fires whenever a resource value changes. I added an **OnResourceChanged** event that is invoked inside **AddResource**, **SpendResource**, and **SetResource**. This allows other systems to react automatically whenever Revenue, Reputation, or Revenue Per Second changes instead of manually updating the UI everywhere.
+
+I had the GameManager act as a listener. In **Start()**, it subscribes to teh event using **resourceManager.OnResourceChanged += HandleResourceChanged**, and in **OnDestroy()** it unsubscribes. The method **HandleResourceChanged** updates the UI when the event is fired. This was a good place to use an event because resource changes are a core part of the gameplay loop (clicking to earn revenue, passive income from employees, and spending resources), and the UI depends on these changes constantly.
+
+For the try-catch exception handler, I thought it would be best to add it to the GameManager. There is a file loading section in **GameManager.Start()** that could throw exceptions since it reads and deserializes XML and JSON files. I wrapped the calls to **LoadUpgradeData()** and **LoadGameState()** inside a try-catch-finally block. If an exception occurs, such as a corrupted or missing file, the **catch** block handles it by creating default data and continuing execution instead of crashing the game. The **finally** block ensures that UI and game systems are still initialized properly.
